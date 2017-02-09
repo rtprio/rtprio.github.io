@@ -1,2 +1,194 @@
-hello.
+<!-- Creator     : groff version 1.19.2 -->
+<!-- CreationDate: Wed Feb  8 22:21:01 2017 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p     { margin-top: 0; margin-bottom: 0; }
+       pre   { margin-top: 0; margin-bottom: 0; }
+       table { margin-top: 0; margin-bottom: 0; }
+</style>
+<title></title>
+</head>
+<body>
 
+<hr>
+
+
+<p valign="top">RTPRIO(1) FreeBSD General Commands Manual
+RTPRIO(1)</p>
+
+<p style="margin-top: 1em" valign="top"><b>NAME</b></p>
+
+<p style="margin-left:6%;"><b>rtprio</b>, <b>idprio</b>
+&mdash; execute, examine or modify a utility&rsquo;s or
+process&rsquo;s realtime or idletime scheduling priority</p>
+
+
+<p style="margin-top: 1em" valign="top"><b>SYNOPSIS</b></p>
+
+<p style="margin-left:22%;"><b>[id|rt]prio <br>
+[id|rt]prio</b> [</p>
+
+<p valign="top"><b>&minus;</b> ]<i>pid</i></p>
+
+<p style="margin-left:22%;"><b>[id|rt]prio</b> <i>priority
+command</i> [args] <b><br>
+[id|rt]prio</b> <i>priority</i> <b>&minus;</b><i>pid</i>
+<b><br>
+[id|rt]prio &minus;t</b> <i>command</i> [args] <b><br>
+[id|rt]prio &minus;t &minus;</b><i>pid</i></p>
+
+
+<p style="margin-top: 1em" valign="top"><b>DESCRIPTION</b></p>
+
+<p style="margin-left:6%;">The <b>rtprio</b> utility is
+used for controlling realtime process scheduling.</p>
+
+<p style="margin-left:6%; margin-top: 1em">The
+<b>idprio</b> utility is used for controlling idletime
+process scheduling, and can be called with the same options
+as <b>rtprio</b>.</p>
+
+<p style="margin-left:6%; margin-top: 1em">A process with a
+realtime priority is not subject to priority degradation,
+and will only be preempted by another process of equal or
+higher realtime priority.</p>
+
+<p style="margin-left:6%; margin-top: 1em">A process with
+an idle priority will run only when no other process is
+runnable and then only if its idle priority is equal or
+greater than all other runnable idle priority processes.</p>
+
+<p style="margin-left:6%; margin-top: 1em">Both
+<b>rtprio</b> or <b>idprio</b> when called without arguments
+will return the realtime priority of the current
+process.</p>
+
+<p style="margin-left:6%; margin-top: 1em">If <b>rtprio</b>
+is called with 1 argument, it will return the realtime
+priority of the process with the specified <i>pid</i>.</p>
+
+<p style="margin-left:6%; margin-top: 1em">If
+<i>priority</i> is specified, the process or program is run
+at that realtime priority. If <b>&minus;t</b> is specified,
+the process or program is run as a normal (non-realtime)
+process.</p>
+
+<p style="margin-left:6%; margin-top: 1em">If <i>-pid</i>
+is specified, the process with the process identifier
+<i>pid</i> will be modified, else if <i>command</i> is
+specified, that program is run with its arguments.</p>
+
+<p style="margin-left:6%; margin-top: 1em"><i>Priority</i>
+is an integer between 0 and RTP_PRIO_MAX (usually 31). 0 is
+the highest priority</p>
+
+<p style="margin-left:6%; margin-top: 1em"><i>Pid</i> of 0
+means &quot;the current process&quot;.</p>
+
+<p style="margin-left:6%; margin-top: 1em">Only root is
+allowed to set realtime or idle priority for a process. A
+user may modify the idle priority of their own processes if
+the sysctl(8) variable
+<i>security.bsd.unprivileged_idprio</i> is set to non-zero.
+Note that this increases the chance that a deadlock can
+occur if a process locks a required resource and then does
+not get to run.</p>
+
+<p style="margin-top: 1em" valign="top"><b>EXIT
+STATUS</b></p>
+
+<p style="margin-left:6%;">If <b>rtprio</b> execute a
+command, the exit value is that of the command executed. In
+all other cases, <b>rtprio</b> exits 0 on success, and 1 for
+all other errors.</p>
+
+
+<p style="margin-top: 1em" valign="top"><b>EXAMPLES</b></p>
+
+<p style="margin-left:6%;">To see which realtime priority
+the current process is at:</p>
+
+<p style="margin-left:14%;">rtprio</p>
+
+<p style="margin-left:6%; margin-top: 1em">To see which
+realtime priority of process 1423:</p>
+
+<p style="margin-left:14%;">rtprio 1423</p>
+
+<p style="margin-left:6%; margin-top: 1em">To run cron(8)
+at the lowest realtime priority:</p>
+
+<p style="margin-left:14%;">rtprio 31 cron</p>
+
+<p style="margin-left:6%; margin-top: 1em">To change the
+realtime priority of process 1423 to 16:</p>
+
+<p style="margin-left:14%;">rtprio 16 -1423</p>
+
+<p style="margin-left:6%; margin-top: 1em">To run
+tcpdump(1) without realtime priority:</p>
+
+<p style="margin-left:14%;">rtprio -t tcpdump</p>
+
+<p style="margin-left:6%; margin-top: 1em">To change the
+realtime priority of process 1423 to RTP_PRIO_NORMAL
+(non-realtime/normal priority):</p>
+
+<p style="margin-left:14%;">rtprio -t -1423</p>
+
+<p style="margin-left:6%; margin-top: 1em">To make depend
+while not disturbing other machine usage:</p>
+
+<p style="margin-left:14%;">idprio 31 make depend</p>
+
+<p style="margin-top: 1em" valign="top"><b>SEE ALSO</b></p>
+
+<p style="margin-left:6%;">nice(1), ps(1), rtprio(2),
+setpriority(2), nice(3), renice(8)</p>
+
+<p style="margin-top: 1em" valign="top"><b>HISTORY</b></p>
+
+<p style="margin-left:6%;">The <b>rtprio</b> utility
+appeared in FreeBSD&nbsp;2.0, but is similar to the HP-UX
+version.</p>
+
+<p style="margin-top: 1em" valign="top"><b>AUTHORS</b></p>
+
+<p style="margin-left:6%;">Henrik Vestergaard Draboel
+&lt;<i>hvd@terry.ping.dk</i>&gt; is the original author.
+This implementation in FreeBSD was substantially rewritten
+by David Greenman.</p>
+
+<p style="margin-top: 1em" valign="top"><b>CAVEATS</b></p>
+
+<p style="margin-left:6%;">You can lock yourself out of the
+system by placing a cpu-heavy process in a realtime
+priority.</p>
+
+<p style="margin-top: 1em" valign="top"><b>BUGS</b></p>
+
+<p style="margin-left:6%;">There is no way to set/view the
+realtime priority of process 0 (swapper) (see ps(1)).</p>
+
+<p style="margin-left:6%; margin-top: 1em">There is in
+FreeBSD no way to ensure that a process page is present in
+memory therefore the process may be stopped for pagein (see
+mprotect(2), madvise(2)).</p>
+
+<p style="margin-left:6%; margin-top: 1em">Under FreeBSD
+system calls are currently never preempted, therefore
+non-realtime processes can starve realtime processes, or
+idletime processes can starve normal priority processes.</p>
+
+
+<p style="margin-left:6%; margin-top: 1em">FreeBSD&nbsp;12.0
+September&nbsp;29, 2012 FreeBSD&nbsp;12.0</p>
+<hr>
+</body>
+</html>
